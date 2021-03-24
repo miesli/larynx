@@ -331,7 +331,12 @@ def do_init(args):
     model_name = args.name or model_dir.name
 
     _LOGGER.debug("Loading gruut language %s", language)
-    gruut_lang = gruut.Language.load(language)
+    gruut_lang = gruut.Language.load(
+        Path(
+            "~/.config/rhasspy/profiles/de/tts/larynx/de/thorsten/gruut/de-de"
+        ).expanduser(),
+        language,
+    )
     assert gruut_lang, f"Unsupported language: {gruut_lang}"
 
     # Create base output directory
@@ -683,7 +688,12 @@ def do_synthesize(args):
     phoneme_map: typing.Dict[str, typing.List[str]] = {}
     if args.accent_language:
         source_language = synthesizer.config["phoneme_language"]
-        accent_lang = gruut.Language.load(args.accent_language)
+        accent_lang = gruut.Language.load(
+            Path(
+                "~/.config/rhasspy/profiles/de/tts/larynx/de/thorsten/gruut/de-de"
+            ).expanduser(),
+            args.accent_language,
+        )
         phoneme_map = accent_lang.accents[source_language]
 
     # Args or stdin
@@ -814,7 +824,12 @@ def do_serve(args):
 
     if tts_config.get("phoneme_backend") == "gruut":
         # Using gruut
-        gruut_lang = gruut.Language.load(synthesizer.config.phoneme_language)
+        gruut_lang = gruut.Language.load(
+            Path(
+                "~/.config/rhasspy/profiles/de/tts/larynx/de/thorsten/gruut/de-de"
+            ).expanduser(),
+            synthesizer.config.phoneme_language,
+        )
         assert (
             gruut_lang
         ), f"Unsupported gruut language: {synthesizer.config.phoneme_language}"
@@ -878,7 +893,12 @@ def do_verify_phonemes(args):
     from TTS.tts.utils.text import make_symbols
 
     _LOGGER.debug("Loading gruut language %s", args.language)
-    gruut_lang = gruut.Language.load(args.language)
+    gruut_lang = gruut.Language.load(
+        Path(
+            "~/.config/rhasspy/profiles/de/tts/larynx/de/thorsten/gruut/de-de"
+        ).expanduser(),
+        args.language,
+    )
     assert gruut_lang, f"Unsupported language: {gruut_lang}"
 
     # Load config
